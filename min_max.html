@@ -1,914 +1,969 @@
 <!--Author: https://github.com/9elements/min-max-calculator-->
 <!--Online: https://min-max-calculator.9elements.com/-->
-<!doctype html>
+<!DOCTYPE html>
 <html class="no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Clamp MinMax</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	<meta http-equiv="cache-control" content="max-age=0"/>
-	<meta http-equiv="cache-control" content="no-cache"/>
-	<meta http-equiv="expires" content="0"/>
-	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT"/>
-	<meta http-equiv="pragma" content="no-cache"/>
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.png">
-	<!--<script src="/js/jquery-3.5.1.min.js"></script>-->
-	<script src="/js/jquery-2.2.4.min.js"></script>
-	<style>
-		
-		:root {
-			--color-foreground: hsl(0 0% 100%);
-			--color-foreground-secondary: hsl(0 0% 100% / .6);
-			--color-orange-hsl: 7 100% 69%;
-			--color-orange: hsl(var(--color-orange-hsl));
-			--color-purple-hsl: 259 81% 28%;
-			--color-purple: hsl(var(--color-purple-hsl));
-			--space: clamp(1.25rem, -.294rem + 6.59vw, 2rem);
-			--font-size--2: clamp(.69rem, .64rem + .22vw, .8rem);
-			--font-size--1: clamp(.83rem, .75rem + .35vw, 1rem);
-			--font-size-0: clamp(1rem, .88rem + .52vw, 1.25rem);
-			--font-size-1: clamp(1.2rem, 1.02rem + .76vw, 1.56rem);
-			--font-size-2: clamp(1.44rem, 1.19rem + 1.07vw, 1.95rem);
-			--font-size-3: clamp(1.73rem, 1.38rem + 1.49vw, 2.44rem);
-			--font-size-4: clamp(2.07rem, 1.59rem + 2.05vw, 3.05rem);
-			--font-size-5: clamp(2.49rem, 1.84rem + 2.78vw, 3.82rem);
-			--headline-font-features: "salt" on;
-			--ease-in-quad: cubic-bezier(.55, .085, .68, .53);
-			--ease-in-cubic: cubic-bezier(.55, .055, .675, .19);
-			--ease-in-quart: cubic-bezier(.895, .03, .685, .22);
-			--ease-in-quint: cubic-bezier(.755, .05, .855, .06);
-			--ease-in-expo: cubic-bezier(.95, .05, .795, .035);
-			--ease-in-circ: cubic-bezier(.6, .04, .98, .335);
-			--ease-out-quad: cubic-bezier(.25, .46, .45, .94);
-			--ease-out-cubic: cubic-bezier(.215, .61, .355, 1);
-			--ease-out-quart: cubic-bezier(.165, .84, .44, 1);
-			--ease-out-quint: cubic-bezier(.23, 1, .32, 1);
-			--ease-out-expo: cubic-bezier(.19, 1, .22, 1);
-			--ease-out-circ: cubic-bezier(.075, .82, .165, 1);
-			--ease-in-out-quad: cubic-bezier(.455, .03, .515, .955);
-			--ease-in-out-cubic: cubic-bezier(.645, .045, .355, 1);
-			--ease-in-out-quart: cubic-bezier(.77, 0, .175, 1);
-			--ease-in-out-quint: cubic-bezier(.86, 0, .07, 1);
-			--ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
-			--ease-in-out-circ: cubic-bezier(.785, .135, .15, .86);
-			--variable-value: 16px;
-		}
-		
-		
-		html, body, .page{
-			margin: 0;
-			padding: 0;
-			width: 100vw;
-			height: 100%;
-			font-size: 16px;
-			box-sizing: border-box;
-		}
-		
-		*, *:before, *:after {
-			box-sizing: border-box;
-		}
-
-		html {
-			position: relative;
-			background-color: #2f0e75;
-		}
-
-		._header_1hp3h_1 {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 1rem;
-			text-align: center
-		}
-
-		._headline_1hp3h_9 {
-			font-feature-settings: var(--headline-font-features);
-			font-size: var(--font-size-5);
-			line-height: 1.15;
-			max-inline-size: 20ch
-		}
-
-		._githubLink_1hp3h_16 svg {
-			--size: 1.5em;
-			block-size: var(--size);
-			inline-size: var(--size)
-		}
-
-		._wrapper_jtxbz_1 {
-			--input-height: 3.75rem;
-			display: flex;
-			flex-direction: column;
-			padding: var(--space);
-			background-color: #ffffff0d;
-			background-image: radial-gradient(50% 50% at 50% 50%, rgba(148, 88, 88, .48) 0%, rgba(148, 88, 88, 0) 100%);
-			border-radius: var(--space);
-			gap: 2rem;
-			-webkit-padding-after: 3rem;
-			padding-block-end: 3rem
-		}
-
-		._form_jtxbz_18 {
-			display: flex;
-			flex-wrap: wrap;
-			gap: var(--space)
-		}
-
-		._form_jtxbz_18:after {
-			flex-basis: 1px;
-			flex-grow: 1;
-			order: -1;
-			background-color: #0000004d;
-			border-radius: 1rem;
-			content: "";
-			min-block-size: 1px
-		}
-
-		._form_jtxbz_18 > :first-child {
-			order: -1
-		}
-
-		._fieldset_jtxbz_38 {
-			--height: 2.5rem;
-			display: grid;
-			flex-basis: calc((49rem - 100%) * 999);
-			flex-grow: 999;
-			border: none;
-			grid-gap: calc(var(--space) / 3 * 2);
-			gap: calc(var(--space) / 3 * 2);
-			grid-template-rows:var(--height) 1fr
-		}
-
-		._fieldsetHeader_jtxbz_49 {
-			display: flex;
-			align-items: center;
-			gap: 1rem
-		}
-
-		._unitToggle_jtxbz_59 * {
-			cursor: pointer
-		}
-
-
-		._legend_jtxbz_144 {
-			display: flex;
-			align-items: center;
-			color: var(--color-orange);
-			font-size: var(--font-size-0);
-			font-weight: 700;
-			letter-spacing: .09em;
-			line-height: 1;
-			text-transform: uppercase
-		}
-
-		._inputRow_jtxbz_155 {
-			display: grid;
-			grid-gap: calc(var(--space) / 3 * 2);
-			gap: calc(var(--space) / 3 * 2);
-			grid-template-columns:repeat(auto-fit, minmax(11.75rem, 1fr))
-		}
-
-		._inputWrapper_jtxbz_161 {
-			position: relative;
-			display: inline-flex;
-			flex-direction: column;
-			font-size: var(--font-size-0);
-			gap: .5rem
-		}
-
-		._inputInner_jtxbz_169 {
-			display: flex;
-			align-items: center;
-			font-weight: 700;
-			gap: .75rem
-		}
-
-		._inputLabel_jtxbz_176 {
-			flex-basis: 3.5ch;
-			text-transform: uppercase
-		}
-
-		._input_jtxbz_155 {
-			--bg-hsl: 259 97% 15%;
-			--shadow-hsl: 7 100% 68%;
-			flex: 1;
-			border: none;
-			-webkit-appearance: none;
-			-moz-appearance: none;
-			appearance: none;
-			background-color: hsl(var(--bg-hsl) / .5);
-			block-size: var(--input-height);
-			border-radius: 99px;
-			box-shadow: 0 0 2.5rem hsl(var(--shadow-hsl) / 0);
-			color: var(--color-foreground);
-			font-weight: 700;
-			min-inline-size: 0;
-			padding-inline: 1.25em 3em;
-			transition: box-shadow .3s ease-in-out, background-color .3s var(--ease-in-out-quad)
-		}
-
-		._input_jtxbz_155:is(:hover, :focus) {
-			background-color: hsl(var(--bg-hsl) / .9)
-		}
-
-		._input_jtxbz_155:focus {
-			box-shadow: 0 0 2.5rem hsl(var(--shadow-hsl) / .8);
-			outline: none
-		}
-
-		._input_jtxbz_155::-webkit-inner-spin-button,
-		._input_jtxbz_155::-webkit-outer-spin-button {
-			margin: 0;
-			-webkit-appearance: none;
-			appearance: none
-		}
-
-		@supports (-moz-appearance: textfield) {
-			._input_jtxbz_155 {
-				-moz-appearance: textfield
-			}
-		}
-
-		._inputUnit_jtxbz_219 {
-			position: absolute;
-			color: var(--color-foreground-secondary);
-			font-size: var(--font-size-0);
-			font-weight: 500;
-			inset-inline-end: 1em;
-			pointer-events: none;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			user-select: none
-		}
-
-		.res-block {
-			--min-height: 4.5rem;
-			display: flex;
-			flex-wrap: wrap;
-			background-color: #ffffff1a;
-			border-radius: calc(var(--min-height) / 2);
-			font-size: var(--font-size-0);
-			line-height: 1.25;
-			min-block-size: var(--min-height);
-			white-space: normal
-		}
-
-		._outputCSS_jtxbz_248 {
-			display: flex;
-			flex-basis: 40ch;
-			flex-grow: 999;
-			align-items: center;
-			padding: 1rem;
-			font-weight: 700;
-			padding-block: 1.25em;
-			padding-inline: 1.75em;
-			-webkit-user-select: all;
-			-moz-user-select: all;
-			user-select: all
-		}
-
-		._copyButtonWrapper_jtxbz_260 {
-			position: relative;
-			display: flex;
-			flex-grow: 1;
-			flex-shrink: 0;
-			align-items: center;
-			align-self: stretch;
-			justify-content: center
-		}
-
-		._copyButton_jtxbz_260 {
-			--offset: .25rem;
-			position: relative;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background-color: var(--color-orange);
-			block-size: 100%;
-			border-radius: calc(var(--min-height) / 2);
-			color: var(--color-purple);
-			font-size: var(--font-size-0);
-			font-weight: 700;
-			inline-size: 100%;
-			line-height: 1;
-			min-block-size: var(--input-height);
-			padding-inline: 2rem;
-			transition: background-color .2s ease-in-out, box-shadow .3s ease-in-out
-		}
-
-		._copyButton_jtxbz_260 ::-moz-selection {
-			background: hsl(var(--color-purple-hsl) / .4)
-		}
-
-		._copyButton_jtxbz_260 ::selection {
-			background: hsl(var(--color-purple-hsl) / .4)
-		}
-
-		._copyButton_jtxbz_260:hover {
-			box-shadow: 0 0 2rem hsl(var(--color-orange-hsl) / .7)
-		}
-
-		._copyButtonTextPlaceholder_jtxbz_297 {
-			opacity: 0
-		}
-
-		._copyButtonText_jtxbz_297 {
-			position: absolute;
-			display: block
-		}
-
-		._copySuccess_jtxbz_306 svg {
-			--size: 2rem;
-			block-size: var(--size);
-			inline-size: var(--size)
-		}
-
-		._errors_jtxbz_328 ul {
-			-webkit-margin-before: .5em;
-			margin-block-start: .5em;
-			-webkit-margin-start: 1.25em;
-			margin-inline-start: 1.25em
-		}
-
-		._errors_jtxbz_328 ul li + li {
-			-webkit-margin-before: .5em;
-			margin-block-start: .5em
-		}
-
-		.test-block {
-			margin-block-end: var(--space);
-			margin-block-start: 1rem;
-		}
-
-
-		.test-block h2 {
-			position: relative;
-			z-index: 2;
-			display: flex;
-			align-items: center;
-			padding: .5em 1em;
-			background: var(--color-orange);
-			border-radius: 999rem;
-			color: var(--color-purple);
-			cursor: pointer;
-			font-size: var(--font-size--1);
-			font-weight: 700;
-			gap: .5em;
-			inline-size: -webkit-max-content;
-			inline-size: -moz-max-content;
-			inline-size: max-content;
-			-webkit-margin-after: -1em;
-			margin-block-end: 1em;
-			margin-inline: auto
-		}
-
-		.test-block h2::-webkit-details-marker {
-			display: none
-		}
-
-
-		.test-block div {
-			overflow: hidden
-		}
-
-		.test-block .test-block__result {
-			/*padding: var(--space);*/
-			background: rgba(255, 255, 255, 0.3);
-			border-radius: var(--variable-value);
-			line-height: 1.4
-		}
-
-
-		._content_13r6z_19 p {
-			font-size: var(--font-size-1);
-			line-height: 1.5
-		}
-
-		._content_13r6z_19 p + p {
-			-webkit-margin-before: 1.5em;
-			margin-block-start: 1.5em
-		}
-
-		._content_13r6z_19 a {
-			color: var(--color-orange);
-			transition: color .2s ease-in-out
-		}
-
-
-		._footer_1eqq2_1 > * {
-			margin: .5rem auto;
-			margin: calc(var(--centerflex-gap, 1rem) / 2) auto
-		}
-
-		._footer_1eqq2_1 > *:first-child {
-			order: -1
-		}
-
-		._footer_1eqq2_1 a {
-			transition: color .2s ease-in-out
-		}
-
-		._footer_1eqq2_1 a:hover {
-			color: var(--color-foreground);
-			text-decoration: underline
-		}
-
-		._examples_ms1kh_9 h2 {
-			color: var(--color-orange);
-			font-feature-settings: var(--headline-font-features);
-			font-size: var(--font-size-4);
-			line-height: 1.15;
-			text-align: center
-		}
-
-
-		
-
-
-		*,
-		:before,
-		:after {
-			box-sizing: border-box
-		}
-
-		html {
-			-moz-tab-size: 4;
-			-o-tab-size: 4;
-			tab-size: 4
-		}
-
-		html {
-			line-height: 1.15;
-			-webkit-text-size-adjust: 100%
-		}
-
-		body {
-			margin: 0
-		}
-
-		body {
-			font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"
-		}
-
-
-		b,
-		strong {
-			font-weight: bolder
-		}
-
-		code,
-		kbd,
-		samp,
-		pre {
-			font-family: ui-monospace, SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
-			font-size: 1em
-		}
-
-		small {
-			font-size: 80%
-		}
-
-		sub,
-		sup {
-			font-size: 75%;
-			line-height: 0;
-			position: relative;
-			vertical-align: baseline
-		}
-
-		sub {
-			bottom: -.25em
-		}
-
-		sup {
-			top: -.5em
-		}
-
-		table {
-			text-indent: 0;
-			border-color: inherit
-		}
-
-		button,
-		input,
-		optgroup,
-		select,
-		textarea {
-			font-family: inherit;
-			font-size: 100%;
-			line-height: 1.15;
-			margin: 0
-		}
-
-		button,
-		select {
-			text-transform: none
-		}
-
-		button,
-		[type=button],
-		[type=reset],
-		[type=submit] {
-			-webkit-appearance: button
-		}
-
-		::-moz-focus-inner {
-			border-style: none;
-			padding: 0
-		}
-
-		:-moz-focusring {
-			outline: 1px dotted ButtonText
-		}
-
-		:-moz-ui-invalid {
-			box-shadow: none
-		}
-
-		* {
-			padding: 0;
-			margin: 0;
-			-webkit-font-smoothing: antialiased;
-			-moz-osx-font-smoothing: grayscale;
-			-webkit-tap-highlight-color: transparent
-		}
-
-		html,
-		body {
-			min-block-size: 100%
-		}
-
-		html {
-			position: relative;
-			background-color: #2f0e75;
-		}
-
-		body {
-			display: flex;
-			flex-direction: column;
-			color: var(--color-foreground);
-			font-family: sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;
-			gap: var(--space);
-			margin-inline: auto;
-			max-inline-size: 66rem;
-			-webkit-padding-before: calc(var(--space) * 2);
-			padding-block-start: calc(var(--space) );
-			padding-inline: 1rem
-		}
-
-		.sr-only {
-			position: absolute;
-			overflow: hidden;
-			padding: 0;
-			border-width: 0;
-			margin: -1px;
-			block-size: 1px;
-			clip: rect(0, 0, 0, 0);
-			inline-size: 1px;
-			white-space: nowrap
-		}
-
-		a {
-			display: inline-block;
-			border-radius: .25rem;
-			color: inherit;
-			text-decoration: underline
-		}
-
-		:focus-visible {
-			outline: 2px solid var(--color-orange);
-			outline-offset: 2px
-		}
-
-		button {
-			border: none;
-			color: inherit;
-			cursor: pointer;
-			font-family: inherit
-		}
-
-		::-moz-selection {
-			background: hsl(var(--color-orange-hsl) / .4);
-			color: var(--color-foreground)
-		}
-
-		::selection {
-			background: hsl(var(--color-orange-hsl) / .4);
-			color: var(--color-foreground)
-		}
-
-		@media (prefers-reduced-motion: reduce) {
-			*,
-			*:before,
-			*:after {
-				-webkit-animation-duration: .01s !important;
-				animation-duration: .01s !important;
-				-webkit-animation-iteration-count: 1 !important;
-				animation-iteration-count: 1 !important;
-				scroll-behavior: auto !important;
-				transition-duration: .01s !important
-			}
-		}
-
-		/*Custom styles*/
-		.test-block__result{
-			position: relative;
-			font-size: var( --variable-value ) !important;
-			padding: var( --variable-value ) calc(var( --variable-value ) * 1.4) !important;
-			margin-bottom: calc(var(--variable-value) * 1.5) !important;
-			border-radius: var( --variable-value-m0 ) !important;
-			line-height: 1.4 !important;
-			hyphens: auto;
-			overflow-wrap: break-word;
-			
-		}
-		
-		.test-block__result:before{
-			content: "";
-			position: absolute;
-			top: var( --variable-value );
-			bottom: var( --variable-value );
-			left: calc(var( --variable-value ) * 1.4);
-			right: calc(var( --variable-value ) * 1.4);
-			background-color: rgba(255, 255, 255, 0.03);
-			border-radius: calc(var( --variable-value-m0 ) / 1.8);
-			z-index: -1;
-			
-		}
-
-		
-	</style>
-
-</head>
-
-<body>
-
-<!--<header class="_header_1hp3h_1">-->
-<!--	<h1 class="_headline_1hp3h_9">Min-Max-Value</h1>-->
-<!--</header>-->
-
-<main>
-	<p class="sr-only">
-		This is a tool that calculates the clamp formula needed to interpolate
-		between a minimum value and a maximum value in a given viewport range.
-		You can choose to use pixels or rems as a unit for the minimum and
-		maximum values.
-	</p>
-	
-	
-	<div id="Z1yq9hQ">
-		
-		<section class="_wrapper_jtxbz_1">
-			<form class="_form_jtxbz_18">
-				
-				<fieldset class="_fieldset_jtxbz_38" aria-label="Minimum and maximum Values">
-					
-					
-					<div class="_fieldsetHeader_jtxbz_49">
-						<span class="_legend_jtxbz_144" aria-hidden="true">Values</span>
-					</div>
-					
-					
-					<div class="_inputRow_jtxbz_155">
-						
-						<div class="_inputWrapper_jtxbz_161">
-							<div class="_inputInner_jtxbz_169">
-								<label class="_inputLabel_jtxbz_176" for="min-value" aria-label="Minimum Value">Min</label>
-								<input class="inputs _input_jtxbz_155" type="number" step="any" id="min-value" aria-describedby="min-value-description" value="16">
-								<span class="_inputUnit_jtxbz_219">px</span>
-							</div>
-						</div>
-						
-						<div class="_inputWrapper_jtxbz_161">
-							<div class="_inputInner_jtxbz_169">
-								<label class="_inputLabel_jtxbz_176" for="max-value" aria-label="Maximum Value">Max</label>
-								<input class="inputs _input_jtxbz_155" type="number" step="any" min="0" id="max-value" value="24">
-								<span class="_inputUnit_jtxbz_219">px</span>
-							</div>
-						</div>
-						
-					</div>
-					
-					
-				</fieldset>
-				
-				
-				
-				<fieldset class="_fieldset_jtxbz_38" aria-label="Viewport range">
-					
-					
-					<span aria-hidden="true" class="_legend_jtxbz_144">Viewport</span>
-					
-					<div class="_inputRow_jtxbz_155">
-						
-						<div class="_inputWrapper_jtxbz_161">
-							<div class="_inputInner_jtxbz_169">
-								<label class="_inputLabel_jtxbz_176" for="min-viewport" aria-label="Minimum viewport">Min</label>
-								<input class="inputs _input_jtxbz_155" type="number" step="any" id="min-viewport" min="0" value="320">
-								<span class="_inputUnit_jtxbz_219">px</span>
-							</div>
-						</div>
-						
-						<div class="_inputWrapper_jtxbz_161">
-							<div class="_inputInner_jtxbz_169">
-								<label class="_inputLabel_jtxbz_176" for="max-viewport" aria-label="Maximum Viewport">Max</label>
-								<input class="inputs _input_jtxbz_155" type="number" step="any" id="max-viewport" min="0" value="1200">
-								<span class="_inputUnit_jtxbz_219">px</span>
-							</div>
-						</div>
-						
-					</div>
-					
-					
-				</fieldset>
-			</form>
-			
-			
-			<h2>Block clamp 1</h2>
-			<div class="res-block">
-				<h2 class="sr-only">Calculated Result:</h2>
-				<code id="outputCSS" class="_outputCSS_jtxbz_248">clamp(1rem, 0.818rem + 0.91vw, 1.5rem)</code>
-				<div class="_copyButtonWrapper_jtxbz_260">
-					<button id="copyButton" class="_copyButton_jtxbz_260" data-copied="false"><span class="_copyButtonTextPlaceholder_jtxbz_297" aria-hidden="true">copy</span>
-						<span class="_copyButtonText_jtxbz_297">copy</span>
-						<span class="sr-only">snippet to clipboard</span>
-					</button>
-				
-				</div>
-			</div>
-			
-			<h2>Text clamp 2</h2>
-			<div class="res-block">
-				<h2 class="sr-only">Calculated Result2:</h2>
-				<code id="outputCSS2" class="_outputCSS_jtxbz_248">clamp(1rem, 0.818rem + 0.91vw, 1.5rem)</code>
-				<div class="_copyButtonWrapper_jtxbz_260">
-					<button id="copyButton2" class="_copyButton_jtxbz_260" data-copied="false"><span class="_copyButtonTextPlaceholder_jtxbz_297" aria-hidden="true">copy</span>
-						<span class="_copyButtonText_jtxbz_297">copy</span>
-						<span class="sr-only">snippet to clipboard</span>
-					</button>
-				
-				</div>
-			</div>
-			
-		</section>
-		
-		<div>
-			<div id="test-block" class="test-block" style="--variable-value: clamp(1rem, 0.818rem + 0.91vw, 1.5rem);">
-				<h2>EXAMPLE</h2>
-				<div>
-					
-					<div lang="en" class="test-block__result" contenteditable="true">
-						This text uses the calculated clamp formula. It gets invisible when you
-						use 0 or negative numbers as a min-value. Try editing it, though...
-					</div>
-					
-					
-					<div lang="en" class="test-block__result" contenteditable="true">
-						This text uses the calculated clamp formula. It gets invisible when you
-						use 0 or negative numbers as a min-value. Try editing it, though...
-					</div>
-					
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	
-
-</main>
-
-<script>
-//https://github.com/9elements/min-max-calculator/blob/main/src/components/Calculator/Calculator.svelte
-
-	function calc_clamp(){
-		
-		const minValue_inp = document.getElementById('min-value');
-		const maxValue_inp = document.getElementById('max-value');
-		const minViewport_inp = document.getElementById('min-viewport');
-		const maxViewport_inp = document.getElementById('max-viewport');
-		
-		let minValue = 16;
-		let maxValue = 24;
-		let minViewport = 320;
-		let maxViewport = 1200;
-		
-		if(minValue_inp.value){
-			minValue = minValue_inp.value;
-		}
-		
-		if(maxValue_inp.value){
-			maxValue = maxValue_inp.value;
-		}
-		
-		if(minViewport_inp.value){
-			minViewport = minViewport_inp.value;
-		}
-		
-		if(maxViewport_inp.value){
-			maxViewport = maxViewport_inp.value;
-		}
-	 
-		// Write Result
-		const variablePart = (maxValue - minValue) / (maxViewport - minViewport);
-		const constant = parseFloat(((maxValue - maxViewport * variablePart) / 16).toFixed(3));
-		let result = `clamp(${minValue}px,${constant ? ` ${constant}rem +` : ""} ${parseFloat((100 * variablePart).toFixed(2))}vw, ${maxValue}px)`;
-		
-		minValue = 0;
-		const variablePart2 = (maxValue - minValue) / (maxViewport - minViewport);
-		const constant2 = parseFloat(((maxValue - maxViewport * variablePart2) / 16).toFixed(3));
-		let result2= `clamp(0px,${constant2 ? ` ${constant2}rem +` : ""} ${parseFloat((100 * variablePart2).toFixed(2))}vw, ${maxValue}px)`;
-		
-		let root = document.documentElement;
-		root.style.setProperty('--variable-value', result );
-		root.style.setProperty('--variable-value-m0', result2 );
-		
-		let test_blk = document.getElementById('test-block');
-		if(test_blk){
-			test_blk.style.setProperty('--variable-value', result);
-		 }
-		
-		let out_blk = document.getElementById('outputCSS');
-		if(out_blk){
-			out_blk.innerText = result;
-		 }
-		
-		let out_blk2 = document.getElementById('outputCSS2');
-		if(out_blk2){
-			out_blk2.innerText = result2;
-		 }
-		
-		
-	}
-	
-	calc_clamp();
-	
-	function clampBuilder( minFontSize, maxFontSize, minWidthPx, maxWidthPx ) {
-	  const root = document.querySelector( "html" );
-	  const pixelsPerRem = 16;
-	
-	  const minWidth = minWidthPx / pixelsPerRem;
-	  const maxWidth = maxWidthPx / pixelsPerRem;
-	
-	  const slope = ( maxFontSize - minFontSize ) / ( maxWidth - minWidth );
-	  const yAxisIntersection = -minWidth * slope + minFontSize
-	
-	  return `clamp( ${ parseFloat(minFontSize) }px, ${ parseFloat(yAxisIntersection) }px + ${ parseFloat(slope * 100) }vw, ${ parseFloat(maxFontSize) }px )`;
-	}
-	
-	
-	const filds = document.querySelectorAll('.inputs');
- 	if(filds){
-		filds.forEach( function(element, index){
-			element.addEventListener("input", function (e) {
-				calc_clamp();
-			});
-		});
-	}
-	
-	const copyr = document.getElementById('copyButton');
- 	if(copyr){
-		copyr.addEventListener("click", function (e) {
-			let copyText = document.getElementById("outputCSS").innerText;
-			copyToClipboard(copyText);
-		});
-	}
-	
-	const copyr2 = document.getElementById('copyButton2');
- 	if(copyr2){
-		copyr2.addEventListener("click", function (e) {
-			let copyText = document.getElementById("outputCSS2").innerText;
-			copyToClipboard(copyText);
-		});
-	}
-	 
-	 function copyToClipboard(textToCopy) {
-		 console.log('Copyed: ' + textToCopy);
-		// navigator clipboard api needs a secure context (https)
-		if (navigator.clipboard && window.isSecureContext) {
-			// navigator clipboard api method'
-			return navigator.clipboard.writeText(textToCopy);
-		} else {
-			// text area method
-			let textArea = document.createElement("textarea");
-			textArea.value = textToCopy;
-			// make the textarea out of viewport
-			textArea.style.position = "fixed";
-			textArea.style.left = "-999999px";
-			textArea.style.top = "-999999px";
-			document.body.appendChild(textArea);
-			textArea.focus();
-			textArea.select();
-			return new Promise((res, rej) => {
-				// here the magic happens
-				document.execCommand('copy') ? res() : rej();
-				textArea.remove();
-				
-			});
-		}
-	}
- 
-</script>
-
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Clamp MinMax</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+    <!--<script src="/js/jquery-3.5.1.min.js"></script>-->
+    <script src="/js/jquery-2.2.4.min.js"></script>
+    <style>
+      :root {
+        --color-foreground: hsl(0 0% 100%);
+        --color-foreground-secondary: hsl(0 0% 100% / 0.6);
+        --color-orange-hsl: 7 100% 69%;
+        --color-orange: hsl(var(--color-orange-hsl));
+        --color-purple-hsl: 259 81% 28%;
+        --color-purple: hsl(var(--color-purple-hsl));
+        --space: clamp(1.25rem, -0.294rem + 6.59vw, 2rem);
+        --font-size--2: clamp(0.69rem, 0.64rem + 0.22vw, 0.8rem);
+        --font-size--1: clamp(0.83rem, 0.75rem + 0.35vw, 1rem);
+        --font-size-0: clamp(1rem, 0.88rem + 0.52vw, 1.25rem);
+        --font-size-1: clamp(1.2rem, 1.02rem + 0.76vw, 1.56rem);
+        --font-size-2: clamp(1.44rem, 1.19rem + 1.07vw, 1.95rem);
+        --font-size-3: clamp(1.73rem, 1.38rem + 1.49vw, 2.44rem);
+        --font-size-4: clamp(2.07rem, 1.59rem + 2.05vw, 3.05rem);
+        --font-size-5: clamp(2.49rem, 1.84rem + 2.78vw, 3.82rem);
+        --headline-font-features: "salt" on;
+        --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+        --ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        --ease-in-quart: cubic-bezier(0.895, 0.03, 0.685, 0.22);
+        --ease-in-quint: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+        --ease-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+        --ease-in-circ: cubic-bezier(0.6, 0.04, 0.98, 0.335);
+        --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+        --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+        --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+        --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+        --ease-out-circ: cubic-bezier(0.075, 0.82, 0.165, 1);
+        --ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+        --ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
+        --ease-in-out-quint: cubic-bezier(0.86, 0, 0.07, 1);
+        --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
+        --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+        --variable-value: 16px;
+      }
+
+      html,
+      body,
+      .page {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100%;
+        font-size: 16px;
+        box-sizing: border-box;
+      }
+
+      *,
+      *:before,
+      *:after {
+        box-sizing: border-box;
+      }
+
+      html {
+        position: relative;
+        background-color: #2f0e75;
+      }
+
+      ._header_1hp3h_1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      ._headline_1hp3h_9 {
+        font-feature-settings: var(--headline-font-features);
+        font-size: var(--font-size-5);
+        line-height: 1.15;
+        max-inline-size: 20ch;
+      }
+
+      ._githubLink_1hp3h_16 svg {
+        --size: 1.5em;
+        block-size: var(--size);
+        inline-size: var(--size);
+      }
+
+      ._wrapper_jtxbz_1 {
+        --input-height: 3.75rem;
+        display: flex;
+        flex-direction: column;
+        padding: var(--space);
+        background-color: #ffffff0d;
+        background-image: radial-gradient(
+          50% 50% at 50% 50%,
+          rgba(148, 88, 88, 0.48) 0%,
+          rgba(148, 88, 88, 0) 100%
+        );
+        border-radius: var(--space);
+        gap: 2rem;
+        -webkit-padding-after: 3rem;
+        padding-block-end: 3rem;
+      }
+
+      ._form_jtxbz_18 {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space);
+      }
+
+      ._form_jtxbz_18:after {
+        flex-basis: 1px;
+        flex-grow: 1;
+        order: -1;
+        background-color: #0000004d;
+        border-radius: 1rem;
+        content: "";
+        min-block-size: 1px;
+      }
+
+      ._form_jtxbz_18 > :first-child {
+        order: -1;
+      }
+
+      ._fieldset_jtxbz_38 {
+        --height: 2.5rem;
+        display: grid;
+        flex-basis: calc((49rem - 100%) * 999);
+        flex-grow: 999;
+        border: none;
+        grid-gap: calc(var(--space) / 3 * 2);
+        gap: calc(var(--space) / 3 * 2);
+        grid-template-rows: var(--height) 1fr;
+      }
+
+      ._fieldsetHeader_jtxbz_49 {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      ._unitToggle_jtxbz_59 * {
+        cursor: pointer;
+      }
+
+      ._legend_jtxbz_144 {
+        display: flex;
+        align-items: center;
+        color: var(--color-orange);
+        font-size: var(--font-size-0);
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      ._inputRow_jtxbz_155 {
+        display: grid;
+        grid-gap: calc(var(--space) / 3 * 2);
+        gap: calc(var(--space) / 3 * 2);
+        grid-template-columns: repeat(auto-fit, minmax(11.75rem, 1fr));
+      }
+
+      ._inputWrapper_jtxbz_161 {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+        font-size: var(--font-size-0);
+        gap: 0.5rem;
+      }
+
+      ._inputInner_jtxbz_169 {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+        gap: 0.75rem;
+      }
+
+      ._inputLabel_jtxbz_176 {
+        flex-basis: 3.5ch;
+        text-transform: uppercase;
+      }
+
+      ._input_jtxbz_155 {
+        --bg-hsl: 259 97% 15%;
+        --shadow-hsl: 7 100% 68%;
+        flex: 1;
+        border: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: hsl(var(--bg-hsl) / 0.5);
+        block-size: var(--input-height);
+        border-radius: 99px;
+        box-shadow: 0 0 2.5rem hsl(var(--shadow-hsl) / 0);
+        color: var(--color-foreground);
+        font-weight: 700;
+        min-inline-size: 0;
+        padding-inline: 1.25em 3em;
+        transition: box-shadow 0.3s ease-in-out,
+          background-color 0.3s var(--ease-in-out-quad);
+      }
+
+      ._input_jtxbz_155:is(:hover, :focus) {
+        background-color: hsl(var(--bg-hsl) / 0.9);
+      }
+
+      ._input_jtxbz_155:focus {
+        box-shadow: 0 0 2.5rem hsl(var(--shadow-hsl) / 0.8);
+        outline: none;
+      }
+
+      ._input_jtxbz_155::-webkit-inner-spin-button,
+      ._input_jtxbz_155::-webkit-outer-spin-button {
+        margin: 0;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      @supports (-moz-appearance: textfield) {
+        ._input_jtxbz_155 {
+          -moz-appearance: textfield;
+        }
+      }
+
+      ._inputUnit_jtxbz_219 {
+        position: absolute;
+        color: var(--color-foreground-secondary);
+        font-size: var(--font-size-0);
+        font-weight: 500;
+        inset-inline-end: 1em;
+        pointer-events: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .res-block {
+        --min-height: 4.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        background-color: #ffffff1a;
+        border-radius: calc(var(--min-height) / 2);
+        font-size: var(--font-size-0);
+        line-height: 1.25;
+        min-block-size: var(--min-height);
+        white-space: normal;
+      }
+
+      ._outputCSS_jtxbz_248 {
+        display: flex;
+        flex-basis: 40ch;
+        flex-grow: 999;
+        align-items: center;
+        padding: 1rem;
+        font-weight: 700;
+        padding-block: 1.25em;
+        padding-inline: 1.75em;
+        -webkit-user-select: all;
+        -moz-user-select: all;
+        user-select: all;
+      }
+
+      ._copyButtonWrapper_jtxbz_260 {
+        position: relative;
+        display: flex;
+        flex-grow: 1;
+        flex-shrink: 0;
+        align-items: center;
+        align-self: stretch;
+        justify-content: center;
+      }
+
+      ._copyButton_jtxbz_260 {
+        --offset: 0.25rem;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--color-orange);
+        block-size: 100%;
+        border-radius: calc(var(--min-height) / 2);
+        color: var(--color-purple);
+        font-size: var(--font-size-0);
+        font-weight: 700;
+        inline-size: 100%;
+        line-height: 1;
+        min-block-size: var(--input-height);
+        padding-inline: 2rem;
+        transition: background-color 0.2s ease-in-out,
+          box-shadow 0.3s ease-in-out;
+      }
+
+      ._copyButton_jtxbz_260 ::-moz-selection {
+        background: hsl(var(--color-purple-hsl) / 0.4);
+      }
+
+      ._copyButton_jtxbz_260 ::selection {
+        background: hsl(var(--color-purple-hsl) / 0.4);
+      }
+
+      ._copyButton_jtxbz_260:hover {
+        box-shadow: 0 0 2rem hsl(var(--color-orange-hsl) / 0.7);
+      }
+
+      ._copyButtonTextPlaceholder_jtxbz_297 {
+        opacity: 0;
+      }
+
+      ._copyButtonText_jtxbz_297 {
+        position: absolute;
+        display: block;
+      }
+
+      ._copySuccess_jtxbz_306 svg {
+        --size: 2rem;
+        block-size: var(--size);
+        inline-size: var(--size);
+      }
+
+      ._errors_jtxbz_328 ul {
+        -webkit-margin-before: 0.5em;
+        margin-block-start: 0.5em;
+        -webkit-margin-start: 1.25em;
+        margin-inline-start: 1.25em;
+      }
+
+      ._errors_jtxbz_328 ul li + li {
+        -webkit-margin-before: 0.5em;
+        margin-block-start: 0.5em;
+      }
+
+      .test-block {
+        margin-block-end: var(--space);
+        margin-block-start: 1rem;
+      }
+
+      .test-block h2 {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        padding: 0.5em 1em;
+        background: var(--color-orange);
+        border-radius: 999rem;
+        color: var(--color-purple);
+        cursor: pointer;
+        font-size: var(--font-size--1);
+        font-weight: 700;
+        gap: 0.5em;
+        inline-size: -webkit-max-content;
+        inline-size: -moz-max-content;
+        inline-size: max-content;
+        -webkit-margin-after: -1em;
+        margin-block-end: 1em;
+        margin-inline: auto;
+      }
+
+      .test-block h2::-webkit-details-marker {
+        display: none;
+      }
+
+      .test-block div {
+        overflow: hidden;
+      }
+
+      .test-block .test-block__result {
+        /*padding: var(--space);*/
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: var(--variable-value);
+        line-height: 1.4;
+      }
+
+      ._content_13r6z_19 p {
+        font-size: var(--font-size-1);
+        line-height: 1.5;
+      }
+
+      ._content_13r6z_19 p + p {
+        -webkit-margin-before: 1.5em;
+        margin-block-start: 1.5em;
+      }
+
+      ._content_13r6z_19 a {
+        color: var(--color-orange);
+        transition: color 0.2s ease-in-out;
+      }
+
+      ._footer_1eqq2_1 > * {
+        margin: 0.5rem auto;
+        margin: calc(var(--centerflex-gap, 1rem) / 2) auto;
+      }
+
+      ._footer_1eqq2_1 > *:first-child {
+        order: -1;
+      }
+
+      ._footer_1eqq2_1 a {
+        transition: color 0.2s ease-in-out;
+      }
+
+      ._footer_1eqq2_1 a:hover {
+        color: var(--color-foreground);
+        text-decoration: underline;
+      }
+
+      ._examples_ms1kh_9 h2 {
+        color: var(--color-orange);
+        font-feature-settings: var(--headline-font-features);
+        font-size: var(--font-size-4);
+        line-height: 1.15;
+        text-align: center;
+      }
+
+      *,
+      :before,
+      :after {
+        box-sizing: border-box;
+      }
+
+      html {
+        -moz-tab-size: 4;
+        -o-tab-size: 4;
+        tab-size: 4;
+      }
+
+      html {
+        line-height: 1.15;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      }
+
+      b,
+      strong {
+        font-weight: bolder;
+      }
+
+      code,
+      kbd,
+      samp,
+      pre {
+        font-family: ui-monospace, SFMono-Regular, Consolas, Liberation Mono,
+          Menlo, monospace;
+        font-size: 1em;
+      }
+
+      small {
+        font-size: 80%;
+      }
+
+      sub,
+      sup {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+      }
+
+      sub {
+        bottom: -0.25em;
+      }
+
+      sup {
+        top: -0.5em;
+      }
+
+      table {
+        text-indent: 0;
+        border-color: inherit;
+      }
+
+      button,
+      input,
+      optgroup,
+      select,
+      textarea {
+        font-family: inherit;
+        font-size: 100%;
+        line-height: 1.15;
+        margin: 0;
+      }
+
+      button,
+      select {
+        text-transform: none;
+      }
+
+      button,
+      [type="button"],
+      [type="reset"],
+      [type="submit"] {
+        -webkit-appearance: button;
+      }
+
+      ::-moz-focus-inner {
+        border-style: none;
+        padding: 0;
+      }
+
+      :-moz-focusring {
+        outline: 1px dotted ButtonText;
+      }
+
+      :-moz-ui-invalid {
+        box-shadow: none;
+      }
+
+      * {
+        padding: 0;
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html,
+      body {
+        min-block-size: 100%;
+      }
+
+      html {
+        position: relative;
+        background-color: #2f0e75;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        color: var(--color-foreground);
+        font-family: sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI,
+          Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue,
+          sans-serif;
+        gap: var(--space);
+        margin-inline: auto;
+        max-inline-size: 66rem;
+        -webkit-padding-before: calc(var(--space) * 2);
+        padding-block-start: calc(var(--space));
+        padding-inline: 1rem;
+      }
+
+      .sr-only {
+        position: absolute;
+        overflow: hidden;
+        padding: 0;
+        border-width: 0;
+        margin: -1px;
+        block-size: 1px;
+        clip: rect(0, 0, 0, 0);
+        inline-size: 1px;
+        white-space: nowrap;
+      }
+
+      a {
+        display: inline-block;
+        border-radius: 0.25rem;
+        color: inherit;
+        text-decoration: underline;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--color-orange);
+        outline-offset: 2px;
+      }
+
+      button {
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      ::-moz-selection {
+        background: hsl(var(--color-orange-hsl) / 0.4);
+        color: var(--color-foreground);
+      }
+
+      ::selection {
+        background: hsl(var(--color-orange-hsl) / 0.4);
+        color: var(--color-foreground);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *:before,
+        *:after {
+          -webkit-animation-duration: 0.01s !important;
+          animation-duration: 0.01s !important;
+          -webkit-animation-iteration-count: 1 !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.01s !important;
+        }
+      }
+
+      /*Custom styles*/
+      .test-block__result {
+        position: relative;
+        font-size: var(--variable-value) !important;
+        padding: var(--variable-value) calc(var(--variable-value) * 1.4) !important;
+        margin-bottom: calc(var(--variable-value) * 1.5) !important;
+        border-radius: var(--variable-value-m0) !important;
+        line-height: 1.4 !important;
+        hyphens: auto;
+        overflow-wrap: break-word;
+      }
+
+      .test-block__result:before {
+        content: "";
+        position: absolute;
+        top: var(--variable-value);
+        bottom: var(--variable-value);
+        left: calc(var(--variable-value) * 1.4);
+        right: calc(var(--variable-value) * 1.4);
+        background-color: rgba(255, 255, 255, 0.03);
+        border-radius: calc(var(--variable-value-m0) / 1.8);
+        z-index: -1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!--<header class="_header_1hp3h_1">-->
+    <!--	<h1 class="_headline_1hp3h_9">Min-Max-Value</h1>-->
+    <!--</header>-->
+
+    <main>
+      <p class="sr-only">
+        This is a tool that calculates the clamp formula needed to interpolate
+        between a minimum value and a maximum value in a given viewport range.
+        You can choose to use pixels or rems as a unit for the minimum and
+        maximum values.
+      </p>
+
+      <div id="Z1yq9hQ">
+        <section class="_wrapper_jtxbz_1">
+          <form class="_form_jtxbz_18">
+            <fieldset
+              class="_fieldset_jtxbz_38"
+              aria-label="Minimum and maximum Values"
+            >
+              <div class="_fieldsetHeader_jtxbz_49">
+                <span class="_legend_jtxbz_144" aria-hidden="true">Values</span>
+              </div>
+
+              <div class="_inputRow_jtxbz_155">
+                <div class="_inputWrapper_jtxbz_161">
+                  <div class="_inputInner_jtxbz_169">
+                    <label
+                      class="_inputLabel_jtxbz_176"
+                      for="min-value"
+                      aria-label="Minimum Value"
+                      >Min</label
+                    >
+                    <input
+                      class="inputs _input_jtxbz_155"
+                      type="number"
+                      step="any"
+                      id="min-value"
+                      aria-describedby="min-value-description"
+                      value="16"
+                    />
+                    <span class="_inputUnit_jtxbz_219">px</span>
+                  </div>
+                </div>
+
+                <div class="_inputWrapper_jtxbz_161">
+                  <div class="_inputInner_jtxbz_169">
+                    <label
+                      class="_inputLabel_jtxbz_176"
+                      for="max-value"
+                      aria-label="Maximum Value"
+                      >Max</label
+                    >
+                    <input
+                      class="inputs _input_jtxbz_155"
+                      type="number"
+                      step="any"
+                      min="0"
+                      id="max-value"
+                      value="24"
+                    />
+                    <span class="_inputUnit_jtxbz_219">px</span>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="_fieldset_jtxbz_38" aria-label="Viewport range">
+              <span aria-hidden="true" class="_legend_jtxbz_144">Viewport</span>
+
+              <div class="_inputRow_jtxbz_155">
+                <div class="_inputWrapper_jtxbz_161">
+                  <div class="_inputInner_jtxbz_169">
+                    <label
+                      class="_inputLabel_jtxbz_176"
+                      for="min-viewport"
+                      aria-label="Minimum viewport"
+                      >Min</label
+                    >
+                    <input
+                      class="inputs _input_jtxbz_155"
+                      type="number"
+                      step="any"
+                      id="min-viewport"
+                      min="0"
+                      value="320"
+                    />
+                    <span class="_inputUnit_jtxbz_219">px</span>
+                  </div>
+                </div>
+
+                <div class="_inputWrapper_jtxbz_161">
+                  <div class="_inputInner_jtxbz_169">
+                    <label
+                      class="_inputLabel_jtxbz_176"
+                      for="max-viewport"
+                      aria-label="Maximum Viewport"
+                      >Max</label
+                    >
+                    <input
+                      class="inputs _input_jtxbz_155"
+                      type="number"
+                      step="any"
+                      id="max-viewport"
+                      min="0"
+                      value="1200"
+                    />
+                    <span class="_inputUnit_jtxbz_219">px</span>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+
+          <h2>Block clamp 1</h2>
+          <div class="res-block">
+            <h2 class="sr-only">Calculated Result:</h2>
+            <code id="outputCSS" class="_outputCSS_jtxbz_248"
+              >clamp(1rem, 0.818rem + 0.91vw, 1.5rem)</code
+            >
+            <div class="_copyButtonWrapper_jtxbz_260">
+              <button
+                id="copyButton"
+                class="_copyButton_jtxbz_260"
+                data-copied="false"
+              >
+                <span
+                  class="_copyButtonTextPlaceholder_jtxbz_297"
+                  aria-hidden="true"
+                  >copy</span
+                >
+                <span class="_copyButtonText_jtxbz_297">copy</span>
+                <span class="sr-only">snippet to clipboard</span>
+              </button>
+            </div>
+          </div>
+
+          <h2>Text clamp 2</h2>
+          <div class="res-block">
+            <h2 class="sr-only">Calculated Result2:</h2>
+            <code id="outputCSS2" class="_outputCSS_jtxbz_248"
+              >clamp(1rem, 0.818rem + 0.91vw, 1.5rem)</code
+            >
+            <div class="_copyButtonWrapper_jtxbz_260">
+              <button
+                id="copyButton2"
+                class="_copyButton_jtxbz_260"
+                data-copied="false"
+              >
+                <span
+                  class="_copyButtonTextPlaceholder_jtxbz_297"
+                  aria-hidden="true"
+                  >copy</span
+                >
+                <span class="_copyButtonText_jtxbz_297">copy</span>
+                <span class="sr-only">snippet to clipboard</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div>
+          <div
+            id="test-block"
+            class="test-block"
+            style="--variable-value: clamp(1rem, 0.818rem + 0.91vw, 1.5rem)"
+          >
+            <h2>EXAMPLE</h2>
+            <div>
+              <div lang="en" class="test-block__result" contenteditable="true">
+                This text uses the calculated clamp formula. It gets invisible
+                when you use 0 or negative numbers as a min-value. Try editing
+                it, though...
+              </div>
+
+              <div lang="en" class="test-block__result" contenteditable="true">
+                This text uses the calculated clamp formula. It gets invisible
+                when you use 0 or negative numbers as a min-value. Try editing
+                it, though...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      //https://github.com/9elements/min-max-calculator/blob/main/src/components/Calculator/Calculator.svelte
+
+      function calc_clamp() {
+        const minValue_inp = document.getElementById("min-value");
+        const maxValue_inp = document.getElementById("max-value");
+        const minViewport_inp = document.getElementById("min-viewport");
+        const maxViewport_inp = document.getElementById("max-viewport");
+
+        let minValue = 16;
+        let maxValue = 24;
+        let minViewport = 320;
+        let maxViewport = 1700;
+
+        if (minValue_inp.value) {
+          minValue = minValue_inp.value;
+        }
+
+        if (maxValue_inp.value) {
+          maxValue = maxValue_inp.value;
+        }
+
+        if (minViewport_inp.value) {
+          minViewport = minViewport_inp.value;
+        }
+
+        if (maxViewport_inp.value) {
+          maxViewport = maxViewport_inp.value;
+        }
+
+        // Write Result
+        const variablePart =
+          (maxValue - minValue) / (maxViewport - minViewport);
+        const constant = parseFloat(
+          ((maxValue - maxViewport * variablePart) / 16).toFixed(3)
+        );
+        let result = `clamp(${minValue}px,${
+          constant ? ` ${constant}rem +` : ""
+        } ${parseFloat((100 * variablePart).toFixed(2))}vw, ${maxValue}px)`;
+
+        minValue = 0;
+        const variablePart2 =
+          (maxValue - minValue) / (maxViewport - minViewport);
+        const constant2 = parseFloat(
+          ((maxValue - maxViewport * variablePart2) / 16).toFixed(3)
+        );
+        let result2 = `clamp(0px,${
+          constant2 ? ` ${constant2}rem +` : ""
+        } ${parseFloat((100 * variablePart2).toFixed(2))}vw, ${maxValue}px)`;
+
+        let root = document.documentElement;
+        root.style.setProperty("--variable-value", result);
+        root.style.setProperty("--variable-value-m0", result2);
+
+        let test_blk = document.getElementById("test-block");
+        if (test_blk) {
+          test_blk.style.setProperty("--variable-value", result);
+        }
+
+        let out_blk = document.getElementById("outputCSS");
+        if (out_blk) {
+          out_blk.innerText = result;
+        }
+
+        let out_blk2 = document.getElementById("outputCSS2");
+        if (out_blk2) {
+          out_blk2.innerText = result2;
+        }
+      }
+
+      calc_clamp();
+
+      function clampBuilder(minFontSize, maxFontSize, minWidthPx, maxWidthPx) {
+        const root = document.querySelector("html");
+        const pixelsPerRem = 16;
+
+        const minWidth = minWidthPx / pixelsPerRem;
+        const maxWidth = maxWidthPx / pixelsPerRem;
+
+        const slope = (maxFontSize - minFontSize) / (maxWidth - minWidth);
+        const yAxisIntersection = -minWidth * slope + minFontSize;
+
+        return `clamp( ${parseFloat(minFontSize)}px, ${parseFloat(
+          yAxisIntersection
+        )}px + ${parseFloat(slope * 100)}vw, ${parseFloat(maxFontSize)}px )`;
+      }
+
+      const filds = document.querySelectorAll(".inputs");
+      if (filds) {
+        filds.forEach(function (element, index) {
+          element.addEventListener("input", function (e) {
+            calc_clamp();
+          });
+        });
+      }
+
+      const copyr = document.getElementById("copyButton");
+      if (copyr) {
+        copyr.addEventListener("click", function (e) {
+          let copyText = document.getElementById("outputCSS").innerText;
+          copyToClipboard(copyText);
+        });
+      }
+
+      const copyr2 = document.getElementById("copyButton2");
+      if (copyr2) {
+        copyr2.addEventListener("click", function (e) {
+          let copyText = document.getElementById("outputCSS2").innerText;
+          copyToClipboard(copyText);
+        });
+      }
+
+      function copyToClipboard(textToCopy) {
+        console.log("Copyed: " + textToCopy);
+        // navigator clipboard api needs a secure context (https)
+        if (navigator.clipboard && window.isSecureContext) {
+          // navigator clipboard api method'
+          return navigator.clipboard.writeText(textToCopy);
+        } else {
+          // text area method
+          let textArea = document.createElement("textarea");
+          textArea.value = textToCopy;
+          // make the textarea out of viewport
+          textArea.style.position = "fixed";
+          textArea.style.left = "-999999px";
+          textArea.style.top = "-999999px";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          return new Promise((res, rej) => {
+            // here the magic happens
+            document.execCommand("copy") ? res() : rej();
+            textArea.remove();
+          });
+        }
+      }
+    </script>
+  </body>
 </html>
